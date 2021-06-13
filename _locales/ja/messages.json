@@ -1,0 +1,8 @@
+{
+  "extName": {
+    "message": "拡張機能 for AWS SSO"
+  },
+  "extDescription": {
+    "message": "AWS Single Sign-On (AWS SSO) を使うときに、もうちょっと便利に使えるようにするための拡張機能です。まずは、AWSコンソールのヘッダに、現在ログインしているアカウントとアクセス権限セットを表示する機能と、アカウント名に'Production'という文字列が含まれていた場合にヘッダを赤っぽくする機能が入っています。"
+  }
+}

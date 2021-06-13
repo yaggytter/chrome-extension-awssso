@@ -1,0 +1,8 @@
+{
+  "extName": {
+    "message": "Extension for AWS SSO"
+  },
+  "extDescription": {
+    "message": "This extension is for AWS Single Sign-On (AWS SSO). As for now, You can see what am I using Account Name and Permission Set for current console at AWS console's header. And then, if account name has 'Production' AWS console header's color will be almost red."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "__MSG_extName__",
+  "description": "__MSG_extDescription__",
+  "default_locale": "en",
+  "version": "0.1",
+  "manifest_version": 2,
+  "permissions": ["storage", "unlimitedStorage"],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.awsapps.com/start#/",
+        "https://*.awsapps.com/start/*",
+        "https://*.console.aws.amazon.com/*"
+      ],
+      "js": ["jquery-3.6.0.min.js", "content.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
