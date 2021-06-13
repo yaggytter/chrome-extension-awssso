@@ -9,4 +9,4 @@ AWS Single Sign-On (AWS SSO) を使うときに、もうちょっと便利に使
 
 ## 使い方
 
-chrome ウェブストア から、この拡張機能を検索して、 chrome に追加するだけです。
+[chrome ウェブストア](https://chrome.google.com/webstore) から、この拡張機能を検索して、 chrome に追加するだけです。
