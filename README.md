@@ -1,5 +1,7 @@
 # Google Chrome Extension for AWS SSO
 
+[日本語の説明はこちら](https://github.com/yaggytter/chrome-extension-awssso/blob/main/README_ja.md)
+
 This extension is for AWS Single Sign-On (AWS SSO). As for now, You can see what am I using Account Name and Permission Set for current console at AWS console's header. And then, AWS console header's color will be almost red if account name has 'Production' .
 
 ![ss_dev.png](screenshots/ss_dev.png)
