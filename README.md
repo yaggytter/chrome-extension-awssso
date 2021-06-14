@@ -8,5 +8,5 @@ This extension is for AWS Single Sign-On (AWS SSO). As for now, You can see what
 
 ## How to use
 
-You just add this extension from [chrome web store](https://chrome.google.com/webstore) to use this.
+You just add this extension from [chrome web store](https://chrome.google.com/webstore/detail/extension-for-aws-sso/ejjegcnihofdahmbbhekhkcnpflljeej) to use this.
 You can also contribute to add your functions to this.
