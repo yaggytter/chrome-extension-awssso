@@ -67,8 +67,9 @@ function changeConsoleHeader() {
 
       tx = $("span[title*='AWSReservedSSO']").text(text);
       if (
-        accountname.indexOf("production") != -1 ||
-        accountname.indexOf("Production") != -1
+        (accountname.indexOf("production") != -1 ||
+          accountname.indexOf("Production") != -1) &&
+        tx.length > 0
       ) {
         $("header").css("background-color", "maroon");
       }
