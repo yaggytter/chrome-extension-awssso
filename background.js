@@ -1,4 +1,4 @@
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   const key = "ssodata";
   if (request.method == "getData") {
     if (localStorage[key]) {

@@ -1,9 +1,8 @@
-window.onload = function () {
+function initAwsSsoExtension() {
   var url = location.href;
   if (url.indexOf("?") > 0) {
     url = url.substring(0, url.indexOf("?"));
   }
-  //  console.log(url);
 
   if (
     url.endsWith(".awsapps.com/start#/") ||
@@ -20,7 +19,7 @@ window.onload = function () {
     // AWS Console
     changeConsoleHeader();
   }
-};
+}
 
 function saveAccountNames(obj) {
   // get some data for AWS SSO from SSO Portal
@@ -37,7 +36,7 @@ function saveAccountNames(obj) {
 
       if (profilelink == obj.target.href) {
         // get clicked data and save to local storage
-        chrome.runtime.sendMessage(
+        browser.runtime.sendMessage(
           {
             method: "saveData",
             data: {
@@ -59,7 +58,7 @@ function saveAccountNames(obj) {
 
 function changeConsoleHeader() {
   // show AWS SSO data to AWS console header
-  chrome.runtime.sendMessage({ method: "getData" }, function (response) {
+  browser.runtime.sendMessage({ method: "getData" }, function (response) {
     if (response) {
       // console.log(response);
       var accountname = response.data.name;
@@ -76,3 +75,5 @@ function changeConsoleHeader() {
     }
   });
 }
+
+initAwsSsoExtension();
