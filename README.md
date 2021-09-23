@@ -10,5 +10,5 @@ This extension is for AWS Single Sign-On (AWS SSO). As for now, You can see what
 
 ## How to use
 
-You just add this extension from [Firefox ADD-ONS page](https://addons.mozilla.org/firefox/) to use this.
+You just add this extension from [Firefox ADD-ONS page](https://addons.mozilla.org/firefox/addon/extension-for-aws-sso/) to use this.
 You can also contribute to add your functions to this.

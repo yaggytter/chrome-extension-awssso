@@ -9,4 +9,4 @@ AWS Single Sign-On (AWS SSO) を使うときに、もうちょっと便利に使
 
 ## 使い方
 
-[Firefox (ja) 向けアドオン](https://addons.mozilla.org/ja/firefox/) から、この拡張機能を検索して、 Firefox に追加するだけです。
+[Firefox (ja) 向けアドオン](https://addons.mozilla.org/ja/firefox/addon/extension-for-aws-sso/) から、この拡張機能を検索して、 Firefox に追加するだけです。
