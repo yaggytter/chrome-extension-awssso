@@ -101,7 +101,7 @@ function changeConsoleHeader() {
       const roleName = title
         .split("/")[0]
         .match(consoleFederatedLoginPattern)[1];
-      const text = `SSO: ${roleName} @ ${accountName}`;
+      const text = `SSO: ${roleName} @ ${accountName} (${accountId})`;
       label.textContent = text;
 
       if (isProductionAccount(accountId, accountName)) {
