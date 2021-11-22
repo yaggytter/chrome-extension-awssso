@@ -87,28 +87,56 @@ function changeConsoleHeader() {
     }
     const accountMap = response.data;
     const labelSelector = () =>
-      document.querySelector("span[title*='AWSReservedSSO']");
+      document
+        .querySelector("span[data-testid='awsc-nav-account-menu-button']")
+        .querySelector("span");
     onElementReady(labelSelector, function (err, label) {
       if (err) {
-        console.warn("Ending SSO title update attempts.");
+        // console.warn("Ending SSO title update attempts.");
         return;
       }
-      const title = label.getAttribute("title");
-      const accountId = document
-        .querySelector("span[data-testid='aws-my-account-details']")
-        .textContent.trim();
+
+      const accountIdDiv = document
+        .querySelector("div[data-testid='account-detail-menu']")
+        .querySelectorAll("span");
+
+      var accountId = "";
+      const isNumberRegexp = new RegExp(/^[0-9]+(\.[0-9]+)?$/);
+      for (span of accountIdDiv) {
+        const accountIdTmp = span.innerText.replaceAll("-", "");
+        if (isNumberRegexp.test(accountIdTmp) && accountIdTmp.length == 12) {
+          accountId = accountIdTmp;
+          break;
+        }
+      }
+      if (!accountId) {
+        return;
+      }
+
+      var roleName = "";
+      for (span of accountIdDiv) {
+        const accountDetail = span.innerText
+          .split("/")[0]
+          .match(consoleFederatedLoginPattern);
+        if (accountDetail && accountDetail.length > 1) {
+          roleName = accountDetail[1];
+          break;
+        }
+      }
+      if (!roleName) {
+        return;
+      }
+
       const accountName = accountMap[accountId];
-      const roleName = title
-        .split("/")[0]
-        .match(consoleFederatedLoginPattern)[1];
       const text = `SSO: ${roleName} @ ${accountName} (${accountId})`;
-      label.textContent = text;
+      label.innerText = text;
 
       if (isProductionAccount(accountId, accountName)) {
-        const headerSelector = () => document.querySelector("header");
+        const headerSelector = () =>
+          document.querySelector("header").querySelector("nav");
         onElementReady(headerSelector, function (err, header) {
           if (err) {
-            console.warn(err);
+            // console.warn(err);
             return;
           }
           header.style.backgroundColor = "maroon";
