@@ -1,5 +1,7 @@
 # Google Chrome Extension for AWS SSO
 
+[![Chrome Web Store](https://img.shields.io/chrome-web-store/v/ejjegcnihofdahmbbhekhkcnpflljeej.svg)](https://chrome.google.com/webstore/detail/extension-for-aws-sso/ejjegcnihofdahmbbhekhkcnpflljeej?utm_source=github)
+
 [日本語の説明はこちら](https://github.com/yaggytter/chrome-extension-awssso/blob/main/README_ja.md)
 
 [Firefox Add-on is here](https://github.com/yaggytter/chrome-extension-awssso/tree/forfirefox)
