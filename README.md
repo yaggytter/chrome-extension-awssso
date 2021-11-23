@@ -2,11 +2,9 @@
 
 [日本語の説明はこちら](./README_ja.md)
 
-This extension is for AWS Single Sign-On (AWS SSO). As for now, You can see what am I using Account Name and Permission Set for current console at AWS console's header. And then, AWS console header's color will be almost red if account name has 'Production' .
+This extension is for AWS Single Sign-On (AWS SSO). As for now, you will see what am I using Account Name and Permission Set for current console at AWS console's header. And then, AWS console header's color will almost be red if account name has 'Production' in it.
 
-![ss_dev.png](screenshots/ss_dev.png)
-
-![ss_prod.png](screenshots/ss_prod.png)
+![ss_dev.png](screenshots/awssso.png)
 
 ## How to use
 
