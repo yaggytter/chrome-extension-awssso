@@ -7,7 +7,7 @@
 [Firefox Add-on is here](https://github.com/yaggytter/chrome-extension-awssso/tree/forfirefox)
 
 This extension is for AWS Single Sign-On (AWS SSO). As for now, you will see what am I using Account Name and Permission Set for current console at AWS console's header.
-And then, AWS console header's color will almost be red if account name has 'Production' in it. (You can customize header colors using regular expressions for account names on the extension's option page.)
+And then, AWS console header's color will almost be red if account name has 'Production' in it. (You can customize header colors using regular expressions for account names on the extension option page.)
 
 ![ss_dev.png](screenshots/awssso.png)
 
