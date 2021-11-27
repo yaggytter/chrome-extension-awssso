@@ -1,3 +1,9 @@
+var defaultcolorjson = {
+  ".*production.*": "maroon",
+  ".*Production.*": "maroon",
+  "^SomeStrings.*": "darkblue",
+};
+
 function initAwsSsoExtension() {
   const { hostname, pathname } = window.location;
   if (hostname.endsWith(".awsapps.com") && pathname.startsWith("/start")) {
@@ -74,10 +80,6 @@ function saveAccountNames() {
   });
 }
 
-function isProductionAccount(accountId, accountName) {
-  return accountName && accountName.toLowerCase().includes("production");
-}
-
 function changeConsoleHeader() {
   const consoleFederatedLoginPattern = /AWSReservedSSO_(.+)_(.+)/;
   // show AWS SSO data to AWS console header
@@ -131,17 +133,29 @@ function changeConsoleHeader() {
       const text = `SSO: ${roleName} @ ${accountName} (${accountId})`;
       label.innerText = text;
 
-      if (isProductionAccount(accountId, accountName)) {
-        const headerSelector = () =>
-          document.querySelector("header").querySelector("nav");
-        onElementReady(headerSelector, function (err, header) {
-          if (err) {
-            // console.warn(err);
-            return;
+      const headerSelector = () =>
+        document.querySelector("header").querySelector("nav");
+      onElementReady(headerSelector, function (err, header) {
+        if (err) {
+          // console.warn(err);
+          return;
+        }
+
+        browser.storage.sync.get("ce_aws_sso_colors", function (items) {
+          console.log(items);
+          var colors = defaultcolorjson;
+          if (items && items.ce_aws_sso_colors) {
+            colors = items.ce_aws_sso_colors;
           }
-          header.style.backgroundColor = "maroon";
+          for (var regexp in colors) {
+            re = new RegExp(regexp);
+            if (re.test(accountName)) {
+              header.style.backgroundColor = colors[regexp];
+              return;
+            }
+          }
         });
-      }
+      });
     });
   });
 }
