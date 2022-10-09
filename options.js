@@ -4,6 +4,13 @@ var defaultcolorjson = {
   "^SomeStrings.*": "darkblue",
 };
 
+var defaultfavsjson = {
+	"favorites": [
+		"11111",
+		"22222"
+	]
+};
+
 function save() {
   var inputjson = document.getElementById("inputjson").value;
 
@@ -46,7 +53,9 @@ function load() {
   });
   chrome.storage.sync.get("ce_aws_sso_favorites", function (items) {
     var value;
-    if (items.ce_aws_sso_favorites) {
+    if (!items.ce_aws_sso_favorites) {
+      value = JSON.stringify(defaultfavsjson, null, "\t");
+    } else {
       value = JSON.stringify(items.ce_aws_sso_favorites, null, "\t");
     }
     document.getElementById("inputjsonfav").value = value;
