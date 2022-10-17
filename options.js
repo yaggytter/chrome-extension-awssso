@@ -6,8 +6,9 @@ var defaultcolorjson = {
 
 var defaultfavsjson = {
 	"favorites": [
-		"11111",
-		"22222"
+		"123456789012-sample",
+		"111111111111-sample",
+		"222222222222-sample"
 	]
 };
 

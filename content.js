@@ -4,6 +4,14 @@ var defaultcolorjson = {
   "^SomeStrings.*": "darkblue",
 };
 
+var defaultfavsjson = {
+	"favorites": [
+		"123456789012-sample",
+		"111111111111-sample",
+		"222222222222-sample"
+	]
+};
+
 window.addEventListener("load", function () {
   const { hostname, pathname } = window.location;
   if (hostname.endsWith(".awsapps.com") && pathname.startsWith("/start")) {
@@ -47,10 +55,53 @@ function saveDataOnSSOAppExpansion() {
       return;
     }
     function onClickHandler() {
+      // awsAccountsApp.removeEventListener("click", onClickHandler);
       saveAccountNames();
-      awsAccountsApp.removeEventListener("click", onClickHandler);
+      makeFavs();
     }
     awsAccountsApp.addEventListener("click", onClickHandler);
+  });
+}
+
+function makeFavs() {
+
+  chrome.storage.sync.get("ce_aws_sso_favorites", function (items) {
+    var favs = defaultfavsjson;
+    if (items.ce_aws_sso_favorites) {
+      favs = items.ce_aws_sso_favorites;
+    }
+    if (favs.favorites) {
+      sortFavs(favs.favorites);
+    }
+  });
+
+}
+
+function sortFavs(arFavs) {
+
+  const accountsSelector = () =>
+    Array.from(document.querySelectorAll("sso-expander portal-instance"));
+  onElementReady(accountsSelector, function (err, accountElements) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    const target = document.querySelector("portal-instance-list");
+
+    arFavsRev = arFavs.reverse();
+
+    for (const favid of arFavsRev) {
+      for (const el of accountElements) {
+        const accountId = el
+        .querySelector(".accountId")
+        .textContent.replace("#", "");
+        if (accountId == favid) {
+          // target.appendChild(el.parentNode.cloneNode(true));
+          target.insertBefore(el.parentNode, target.firstChild);
+        }
+      }
+    }
+
   });
 }
 
