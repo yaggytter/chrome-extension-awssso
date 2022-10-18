@@ -91,6 +91,7 @@ function sortFavs(arFavs) {
     const target = document.querySelector("portal-instance-list");
 
     arFavsRev = arFavs.reverse();
+    iconurl = chrome.extension.getURL("icons/fav.png");
 
     for (const favid of arFavsRev) {
       for (const el of accountElements) {
@@ -100,6 +101,7 @@ function sortFavs(arFavs) {
         if (accountId == favid) {
           // target.appendChild(el.parentNode.cloneNode(true));
           target.insertBefore(el.parentNode, target.firstChild);
+          el.querySelector("img").src = iconurl;
           break;
         }
       }

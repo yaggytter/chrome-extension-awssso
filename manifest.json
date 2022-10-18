@@ -16,6 +16,9 @@
       "js": ["content.js"]
     }
   ],
+  "web_accessible_resources": [
+    "icons/fav.png"
+  ],
   "background": {
     "scripts": ["background.js"]
   },
