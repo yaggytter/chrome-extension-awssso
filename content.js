@@ -18,8 +18,9 @@ window.addEventListener("load", function () {
     pathname.startsWith("/start")) {
     // AWS SSO portal
     saveDataOnSSOAppExpansion();
-  } else if (hostname.includes("console.aws.amazon.com")) {
-    // AWS Console
+  } else if (hostname.includes("console.aws.amazon.com") || 
+    hostname.includes("health.aws.amazon.com")) {
+    // AWS Console (including PHD)
     changeConsoleHeader();
   }
 });
