@@ -12,27 +12,27 @@ var defaultfavsjson = {
 	]
 };
 
-function save() {
-  var inputjson = document.getElementById("inputjson").value;
+function savecolors() {
+  var inputjson = document.getElementById("inputjsoncolors").value;
 
   var colors;
   try {
     colors = JSON.parse(inputjson);
   } catch (e) {
-    document.getElementById("mes").innerHTML = "invalid json.";
+    document.getElementById("mescolors").innerHTML = "invalid json.";
     return;
   }
 
   chrome.storage.sync.set({ ce_aws_sso_colors: colors }, function () {});
-  document.getElementById("mes").innerHTML = "saved.";
+  document.getElementById("mescolors").innerHTML = "saved.";
 }
 
 function savefav() {
-  var inputjsonfav = document.getElementById("inputjsonfav").value;
+  var inputjson = document.getElementById("inputjsonfav").value;
 
   var favorites;
   try {
-    favorites = JSON.parse(inputjsonfav);
+    favorites = JSON.parse(inputjson);
   } catch (e) {
     document.getElementById("mesfav").innerHTML = "invalid json.";
     return;
@@ -50,7 +50,7 @@ function load() {
     } else {
       value = JSON.stringify(items.ce_aws_sso_colors, null, "\t");
     }
-    document.getElementById("inputjson").value = value;
+    document.getElementById("inputjsoncolors").value = value;
   });
   chrome.storage.sync.get("ce_aws_sso_favorites", function (items) {
     var value;
@@ -65,5 +65,5 @@ function load() {
 
 document.addEventListener("DOMContentLoaded", load);
 
-document.getElementById("savebutton").addEventListener("click", save);
+document.getElementById("savebuttoncolors").addEventListener("click", savecolors);
 document.getElementById("savebuttonfav").addEventListener("click", savefav);

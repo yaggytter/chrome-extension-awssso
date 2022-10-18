@@ -14,7 +14,8 @@ var defaultfavsjson = {
 
 window.addEventListener("load", function () {
   const { hostname, pathname } = window.location;
-  if (hostname.endsWith(".awsapps.com") && pathname.startsWith("/start")) {
+  if (hostname.endsWith(".awsapps.com") && 
+    pathname.startsWith("/start")) {
     // AWS SSO portal
     saveDataOnSSOAppExpansion();
   } else if (hostname.includes("console.aws.amazon.com")) {
@@ -98,6 +99,7 @@ function sortFavs(arFavs) {
         if (accountId == favid) {
           // target.appendChild(el.parentNode.cloneNode(true));
           target.insertBefore(el.parentNode, target.firstChild);
+          break;
         }
       }
     }
