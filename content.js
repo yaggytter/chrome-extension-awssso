@@ -12,10 +12,9 @@ var defaultfavsjson = {
 	]
 };
 
-window.addEventListener("load", function () {
+function initAwsSsoExtension() {
   const { hostname, pathname } = window.location;
-  if (hostname.endsWith(".awsapps.com") && 
-    pathname.startsWith("/start")) {
+  if (hostname.endsWith(".awsapps.com") && pathname.startsWith("/start")) {
     // AWS SSO portal
     saveDataOnSSOAppExpansion();
   } else if (hostname.includes("console.aws.amazon.com") || 
@@ -23,7 +22,7 @@ window.addEventListener("load", function () {
     // AWS Console (including PHD)
     changeConsoleHeader();
   }
-});
+}
 
 // Helper function for waiting until an element selection has been rendered.
 function onElementReady(selectorFn, fn) {
@@ -197,9 +196,10 @@ function changeConsoleHeader() {
           return;
         }
 
-        chrome.storage.sync.get("ce_aws_sso_colors", function (items) {
+        browser.storage.sync.get("ce_aws_sso_colors", function (items) {
+          console.log(items);
           var colors = defaultcolorjson;
-          if (items.ce_aws_sso_colors) {
+          if (items && items.ce_aws_sso_colors) {
             colors = items.ce_aws_sso_colors;
           }
           for (var regexp in colors) {
@@ -214,3 +214,5 @@ function changeConsoleHeader() {
     });
   });
 }
+
+initAwsSsoExtension();
