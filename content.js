@@ -66,7 +66,7 @@ function saveDataOnSSOAppExpansion() {
 
 function makeFavs() {
 
-  chrome.storage.sync.get("ce_aws_sso_favorites", function (items) {
+  browser.storage.sync.get("ce_aws_sso_favorites", function (items) {
     var favs = defaultfavsjson;
     if (items.ce_aws_sso_favorites) {
       favs = items.ce_aws_sso_favorites;
@@ -80,6 +80,9 @@ function makeFavs() {
 
 function sortFavs(arFavs) {
 
+  console.log("sortFavs");
+  console.log(arFavs);
+
   const accountsSelector = () =>
     Array.from(document.querySelectorAll("sso-expander portal-instance"));
   onElementReady(accountsSelector, function (err, accountElements) {
@@ -90,13 +93,14 @@ function sortFavs(arFavs) {
     const target = document.querySelector("portal-instance-list");
 
     arFavsRev = arFavs.reverse();
-    iconurl = chrome.extension.getURL("icons/fav.png");
+    iconurl = browser.extension.getURL("icons/fav.png");
 
     for (const favid of arFavsRev) {
       for (const el of accountElements) {
         const accountId = el
         .querySelector(".accountId")
         .textContent.replace("#", "");
+        console.log(accountId, favid);
         if (accountId == favid) {
           // target.appendChild(el.parentNode.cloneNode(true));
           target.insertBefore(el.parentNode, target.firstChild);
@@ -126,7 +130,7 @@ function saveAccountNames() {
       return map;
     }, {});
 
-    chrome.runtime.sendMessage(
+    browser.runtime.sendMessage(
       { method: "saveSSOData", data: accountMap },
       function (response) {
         console.log("Saved SSO data to LocalStorage for Console augmentation.");
@@ -138,7 +142,7 @@ function saveAccountNames() {
 function changeConsoleHeader() {
   const consoleFederatedLoginPattern = /AWSReservedSSO_(.+)_(.+)/;
   // show AWS SSO data to AWS console header
-  chrome.runtime.sendMessage({ method: "getSSOData" }, function (response) {
+  browser.runtime.sendMessage({ method: "getSSOData" }, function (response) {
     if (!(response && response.data)) {
       return;
     }
