@@ -23,7 +23,7 @@ function savecolors() {
     return;
   }
 
-  chrome.storage.sync.set({ ce_aws_sso_colors: colors }, function () {});
+  chrome.storage.local.set({ ce_aws_sso_colors: colors }, function () {});
   document.getElementById("mescolors").innerHTML = "saved.";
 }
 
@@ -38,12 +38,12 @@ function savefav() {
     return;
   }
 
-  chrome.storage.sync.set({ ce_aws_sso_favorites: favorites }, function () {});
+  chrome.storage.local.set({ ce_aws_sso_favorites: favorites }, function () {});
   document.getElementById("mesfav").innerHTML = "saved.";
 }
 
 function load() {
-  chrome.storage.sync.get("ce_aws_sso_colors", function (items) {
+  chrome.storage.local.get("ce_aws_sso_colors", function (items) {
     var value;
     if (!items.ce_aws_sso_colors) {
       value = JSON.stringify(defaultcolorjson, null, "\t");
@@ -52,7 +52,7 @@ function load() {
     }
     document.getElementById("inputjsoncolors").value = value;
   });
-  chrome.storage.sync.get("ce_aws_sso_favorites", function (items) {
+  chrome.storage.local.get("ce_aws_sso_favorites", function (items) {
     var value;
     if (!items.ce_aws_sso_favorites) {
       value = JSON.stringify(defaultfavsjson, null, "\t");
