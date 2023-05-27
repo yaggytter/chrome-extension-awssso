@@ -189,48 +189,34 @@ function changeConsoleHeaderAndFooter() {
       const text = `SSO: ${roleName} @ ${accountName} (${accountId})`;
       label.innerText = text;
 
-      const headerSelector = () =>
-        document.querySelector("header").querySelector("nav");
-      onElementReady(headerSelector, function (err, header) {
-        if (err) {
-          // console.warn(err);
-          return;
+      chrome.storage.local.get("ce_aws_sso_colors", function (items) {
+        var colors = defaultcolorjson;
+        if (items.ce_aws_sso_colors) {
+          colors = items.ce_aws_sso_colors;
         }
-
-        chrome.storage.local.get("ce_aws_sso_colors", function (items) {
-          var colors = defaultcolorjson;
-          if (items.ce_aws_sso_colors) {
-            colors = items.ce_aws_sso_colors;
-          }
-          for (var regexp in colors) {
-            re = new RegExp(regexp);
-            if (re.test(accountName)) {
+        for (var regexp in colors) {
+          re = new RegExp(regexp);
+          if (re.test(accountName)) {
+            const headerSelector = () =>
+              document.querySelector("header").querySelector("nav");
+            onElementReady(headerSelector, function (err, header) {
+              if (err) {
+                // console.warn(err);
+                return;
+              }
               header.style.backgroundColor = colors[regexp];
-              return;
-            }
+            });
+            const footerSelector = () =>
+              document.querySelector("div[id='console-nav-footer-inner']");
+            onElementReady(footerSelector, function (err, footer) {
+              if (err) {
+                return;
+              }
+              footer.style.backgroundColor = colors[regexp];
+            });
           }
-        });
-      });
-
-      const footerSelector = () =>
-        document.querySelector("div[id='console-nav-footer-inner']");
-      onElementReady(footerSelector, function (err, footer) {
-        if (err) {
           return;
         }
-        chrome.storage.local.get("ce_aws_sso_colors", function (items) {
-          var colors = defaultcolorjson;
-          if (items.ce_aws_sso_colors) {
-            colors = items.ce_aws_sso_colors;
-          }
-          for (var regexp in colors) {
-            re = new RegExp(regexp);
-            if (re.test(accountName)) {
-              footer.style.backgroundColor = colors[regexp];
-              return;
-            }
-          }
-        });
       });
     });
   });
