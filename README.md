@@ -10,6 +10,7 @@ This extension is for AWS IAM Identity Center (The old name is AWS SSO). As for 
 You will see what am I using Account Name and Permission Set for current console at AWS console's header, AWS console header's color will almost be red if account name has 'Production' in it, and to bring favorite accounts to the top on the SSO login page. (You can customize header colors using regular expressions for account names on the extension option page. Favorites too.)
 
 ![ss_dev.png](screenshots/awssso.png)
+![ss_fav.png](screenshots/accountfav.jpg)
 
 ## How to use
 
