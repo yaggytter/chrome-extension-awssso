@@ -67,7 +67,7 @@ function saveDataOnSSOAppExpansion() {
 
 function makeFavs() {
 
-  browser.storage.sync.get("ce_aws_sso_favorites", function (items) {
+  browser.storage.local.get("ce_aws_sso_favorites", function (items) {
     var favs = defaultfavsjson;
     if (items.ce_aws_sso_favorites) {
       favs = items.ce_aws_sso_favorites;
@@ -81,8 +81,8 @@ function makeFavs() {
 
 function sortFavs(arFavs) {
 
-  console.log("sortFavs");
-  console.log(arFavs);
+  // console.log("sortFavs");
+  // console.log(arFavs);
 
   const accountsSelector = () =>
     Array.from(document.querySelectorAll("sso-expander portal-instance"));
@@ -101,7 +101,7 @@ function sortFavs(arFavs) {
         const accountId = el
         .querySelector(".accountId")
         .textContent.replace("#", "");
-        console.log(accountId, favid);
+        // console.log(accountId, favid);
         if (accountId == favid) {
           // target.appendChild(el.parentNode.cloneNode(true));
           target.insertBefore(el.parentNode, target.firstChild);
@@ -197,7 +197,7 @@ function changeConsoleHeaderAndFooter() {
       label.innerText = text;
 
       browser.storage.local.get("ce_aws_sso_colors", function (items) {
-        console.log(items);
+        // console.log(items);
         var colors = defaultcolorjson;
         if (items && items.ce_aws_sso_colors) {
           colors = items.ce_aws_sso_colors;
@@ -216,7 +216,7 @@ function changeConsoleHeaderAndFooter() {
             });
             const footerSelector = () =>
               document.querySelector("div[id='console-nav-footer-inner']");
-            onElementReady(footerSelector, function (err, header) {
+            onElementReady(footerSelector, function (err, footer) {
               if (err) {
                 // console.warn(err);
                 return;
