@@ -1,4 +1,4 @@
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   const key = "firefox-aws-sso-data";
   if (request.method == "getSSOData") {
     if (localStorage[key]) {

@@ -4,14 +4,25 @@ var defaultcolorjson = {
   "^SomeStrings.*": "darkblue",
 };
 
+var defaultfavsjson = {
+  favorites: [
+    "123456789012-sample",
+    "111111111111-sample",
+    "222222222222-sample",
+  ],
+};
+
 function initAwsSsoExtension() {
   const { hostname, pathname } = window.location;
   if (hostname.endsWith(".awsapps.com") && pathname.startsWith("/start")) {
     // AWS SSO portal
     saveDataOnSSOAppExpansion();
-  } else if (hostname.includes("console.aws.amazon.com")) {
+  } else if (
+    hostname.includes("console.aws.amazon.com") ||
+    hostname.includes("health.aws.amazon.com")
+  ) {
     // AWS Console
-    changeConsoleHeader();
+    changeConsoleHeaderAndFooter();
   }
 }
 
@@ -48,9 +59,58 @@ function saveDataOnSSOAppExpansion() {
     }
     function onClickHandler() {
       saveAccountNames();
-      awsAccountsApp.removeEventListener("click", onClickHandler);
+      makeFavs();
     }
     awsAccountsApp.addEventListener("click", onClickHandler);
+  });
+}
+
+function makeFavs() {
+
+  browser.storage.sync.get("ce_aws_sso_favorites", function (items) {
+    var favs = defaultfavsjson;
+    if (items.ce_aws_sso_favorites) {
+      favs = items.ce_aws_sso_favorites;
+    }
+    if (favs.favorites) {
+      sortFavs(favs.favorites);
+    }
+  });
+
+}
+
+function sortFavs(arFavs) {
+
+  console.log("sortFavs");
+  console.log(arFavs);
+
+  const accountsSelector = () =>
+    Array.from(document.querySelectorAll("sso-expander portal-instance"));
+  onElementReady(accountsSelector, function (err, accountElements) {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    const target = document.querySelector("portal-instance-list");
+
+    arFavsRev = arFavs.reverse();
+    iconurl = browser.extension.getURL("icons/fav.png");
+
+    for (const favid of arFavsRev) {
+      for (const el of accountElements) {
+        const accountId = el
+        .querySelector(".accountId")
+        .textContent.replace("#", "");
+        console.log(accountId, favid);
+        if (accountId == favid) {
+          // target.appendChild(el.parentNode.cloneNode(true));
+          target.insertBefore(el.parentNode, target.firstChild);
+          el.querySelector("img").src = iconurl;
+          break;
+        }
+      }
+    }
+
   });
 }
 
@@ -71,7 +131,7 @@ function saveAccountNames() {
       return map;
     }, {});
 
-    chrome.runtime.sendMessage(
+    browser.runtime.sendMessage(
       { method: "saveSSOData", data: accountMap },
       function (response) {
         console.log("Saved SSO data to LocalStorage for Console augmentation.");
@@ -80,23 +140,26 @@ function saveAccountNames() {
   });
 }
 
-function changeConsoleHeader() {
+function changeConsoleHeaderAndFooter() {
   const consoleFederatedLoginPattern = /AWSReservedSSO_(.+)_(.+)/;
   // show AWS SSO data to AWS console header
-  chrome.runtime.sendMessage({ method: "getSSOData" }, function (response) {
+  browser.runtime.sendMessage({ method: "getSSOData" }, function (response) {
     if (!(response && response.data)) {
       return;
     }
     const accountMap = response.data;
     const labelSelector = () =>
-      document
-        .querySelector("span[data-testid='awsc-nav-account-menu-button']")
-        .querySelector("span");
+      document.querySelector(
+        "span[data-testid='awsc-nav-account-menu-button']"
+      );
+
     onElementReady(labelSelector, function (err, label) {
       if (err) {
         // console.warn("Ending SSO title update attempts.");
         return;
       }
+
+      label = label.querySelector("span");
 
       const accountIdDiv = document
         .querySelector("div[data-testid='account-detail-menu']")
@@ -133,28 +196,35 @@ function changeConsoleHeader() {
       const text = `SSO: ${roleName} @ ${accountName} (${accountId})`;
       label.innerText = text;
 
-      const headerSelector = () =>
-        document.querySelector("header").querySelector("nav");
-      onElementReady(headerSelector, function (err, header) {
-        if (err) {
-          // console.warn(err);
-          return;
+      browser.storage.local.get("ce_aws_sso_colors", function (items) {
+        console.log(items);
+        var colors = defaultcolorjson;
+        if (items && items.ce_aws_sso_colors) {
+          colors = items.ce_aws_sso_colors;
         }
-
-        browser.storage.sync.get("ce_aws_sso_colors", function (items) {
-          console.log(items);
-          var colors = defaultcolorjson;
-          if (items && items.ce_aws_sso_colors) {
-            colors = items.ce_aws_sso_colors;
-          }
-          for (var regexp in colors) {
-            re = new RegExp(regexp);
-            if (re.test(accountName)) {
+        for (var regexp in colors) {
+          re = new RegExp(regexp);
+          if (re.test(accountName)) {
+            const headerSelector = () =>
+              document.querySelector("header").querySelector("nav");
+            onElementReady(headerSelector, function (err, header) {
+              if (err) {
+                // console.warn(err);
+                return;
+              }
               header.style.backgroundColor = colors[regexp];
-              return;
-            }
+            });
+            const footerSelector = () =>
+              document.querySelector("div[id='console-nav-footer-inner']");
+            onElementReady(footerSelector, function (err, header) {
+              if (err) {
+                // console.warn(err);
+                return;
+              }
+              footer.style.backgroundColor = colors[regexp];
+            });
           }
-        });
+        }
       });
     });
   });
