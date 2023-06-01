@@ -215,7 +215,6 @@ function changeConsoleHeaderAndFooter() {
               footer.style.backgroundColor = colors[regexp];
             });
           }
-          return;
         }
       });
     });
