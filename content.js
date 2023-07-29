@@ -154,68 +154,75 @@ function changeConsoleHeaderAndFooter() {
 
       label = label.querySelector("span");
 
-      const accountIdDiv = document
-        .querySelector("div[data-testid='account-detail-menu']")
-        .querySelectorAll("span");
+      const accountIdDivSelector = () =>
+        document.querySelector("div[data-testid='account-detail-menu']");
 
-      var accountId = "";
-      const isNumberRegexp = new RegExp(/^[0-9]+(\.[0-9]+)?$/);
-      for (span of accountIdDiv) {
-        const accountIdTmp = span.innerText.replaceAll("-", "");
-        if (isNumberRegexp.test(accountIdTmp) && accountIdTmp.length == 12) {
-          accountId = accountIdTmp;
-          break;
+      onElementReady(accountIdDivSelector, function (err, accountIdDiv) {
+        if (err) {
+          return;
         }
-      }
-      if (!accountId) {
-        return;
-      }
 
-      var roleName = "";
-      for (span of accountIdDiv) {
-        const accountDetail = span.innerText
-          .split("/")[0]
-          .match(consoleFederatedLoginPattern);
-        if (accountDetail && accountDetail.length > 1) {
-          roleName = accountDetail[1];
-          break;
-        }
-      }
-      if (!roleName) {
-        return;
-      }
+        const accountIds = accountIdDiv.querySelectorAll("span");
 
-      const accountName = accountMap[accountId];
-      const text = `SSO: ${roleName} @ ${accountName} (${accountId})`;
-      label.innerText = text;
-
-      chrome.storage.local.get("ce_aws_sso_colors", function (items) {
-        var colors = defaultcolorjson;
-        if (items.ce_aws_sso_colors) {
-          colors = items.ce_aws_sso_colors;
-        }
-        for (var regexp in colors) {
-          re = new RegExp(regexp);
-          if (re.test(accountName)) {
-            const headerSelector = () =>
-              document.querySelector("header").querySelector("nav");
-            onElementReady(headerSelector, function (err, header) {
-              if (err) {
-                // console.warn(err);
-                return;
-              }
-              header.style.backgroundColor = colors[regexp];
-            });
-            const footerSelector = () =>
-              document.querySelector("div[id='console-nav-footer-inner']");
-            onElementReady(footerSelector, function (err, footer) {
-              if (err) {
-                return;
-              }
-              footer.style.backgroundColor = colors[regexp];
-            });
+        var accountId = "";
+        const isNumberRegexp = new RegExp(/^[0-9]+(\.[0-9]+)?$/);
+        for (span of accountIds) {
+          const accountIdTmp = span.innerText.replaceAll("-", "");
+          if (isNumberRegexp.test(accountIdTmp) && accountIdTmp.length == 12) {
+            accountId = accountIdTmp;
+            break;
           }
         }
+        if (!accountId) {
+          return;
+        }
+
+        var roleName = "";
+        for (span of accountIds) {
+          const accountDetail = span.innerText
+            .split("/")[0]
+            .match(consoleFederatedLoginPattern);
+          if (accountDetail && accountDetail.length > 1) {
+            roleName = accountDetail[1];
+            break;
+          }
+        }
+        if (!roleName) {
+          return;
+        }
+
+        const accountName = accountMap[accountId];
+        const text = `SSO: ${roleName} @ ${accountName} (${accountId})`;
+        label.innerText = text;
+
+        chrome.storage.local.get("ce_aws_sso_colors", function (items) {
+          var colors = defaultcolorjson;
+          if (items.ce_aws_sso_colors) {
+            colors = items.ce_aws_sso_colors;
+          }
+          for (var regexp in colors) {
+            re = new RegExp(regexp);
+            if (re.test(accountName)) {
+              const headerSelector = () =>
+                document.querySelector("header").querySelector("nav");
+              onElementReady(headerSelector, function (err, header) {
+                if (err) {
+                  // console.warn(err);
+                  return;
+                }
+                header.style.backgroundColor = colors[regexp];
+              });
+              const footerSelector = () =>
+                document.querySelector("div[id='console-nav-footer-inner']");
+              onElementReady(footerSelector, function (err, footer) {
+                if (err) {
+                  return;
+                }
+                footer.style.backgroundColor = colors[regexp];
+              });
+            }
+          }
+        });
       });
     });
   });
