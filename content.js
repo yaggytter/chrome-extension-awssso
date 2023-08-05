@@ -91,7 +91,7 @@ function sortFavs(arFavs) {
     const target = document.querySelector("portal-instance-list");
 
     arFavsRev = arFavs.reverse();
-    iconurl = browser.extension.getURL("icons/fav.png");
+    iconurl = browser.runtime.getURL("icons/fav.png");
 
     for (const favid of arFavsRev) {
       for (const el of accountElements) {
