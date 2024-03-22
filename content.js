@@ -46,23 +46,15 @@ function onElementReady(selectorFn, fn) {
 }
 
 function saveDataOnSSOAppExpansion() {
-  // Finds the SSO portal app for AWS account selection and adds a click
-  // handler that will save the account names and profiles to local storage.
   const awsAccountsAppSelector = () =>
-    Array.from(document.querySelectorAll("portal-application")).find((el) => {
-      return el.textContent.trim().startsWith("AWS Account");
-    });
+      document.querySelector('div[data-testid="account-list"]');
   onElementReady(awsAccountsAppSelector, function (err, awsAccountsApp) {
     if (err) {
       console.error(err);
       return;
     }
-    function onClickHandler() {
-      // awsAccountsApp.removeEventListener("click", onClickHandler);
-      saveAccountNames();
-      makeFavs();
-    }
-    awsAccountsApp.addEventListener("click", onClickHandler);
+    saveAccountNames();
+    makeFavs();
   });
 }
 
@@ -80,26 +72,38 @@ function makeFavs() {
 
 function sortFavs(arFavs) {
   const accountsSelector = () =>
-    Array.from(document.querySelectorAll("sso-expander portal-instance"));
+      Array.from(document.querySelectorAll('button[data-testid="account-list-cell"]'));
   onElementReady(accountsSelector, function (err, accountElements) {
     if (err) {
       console.error(err);
       return;
     }
-    const target = document.querySelector("portal-instance-list");
+
+    const target = document.querySelector('div[data-testid="account-list"]');
 
     arFavsRev = arFavs.reverse();
     iconurl = chrome.runtime.getURL("icons/fav.png");
 
     for (const favid of arFavsRev) {
       for (const el of accountElements) {
-        const accountId = el
-          .querySelector(".accountId")
-          .textContent.replace("#", "");
-        if (accountId == favid) {
+        const childDivs = el.querySelectorAll("div");
+        let accountId = "";
+        Array.from(childDivs).map((value, index, array) => {
+          accountId = value.textContent.match(/\d{12}/);
+
+        })
+        accountId = accountId.toString();
+        if (accountId === favid) {
+          console.warn("Found favorite account: " + favid);
           // Move the favorites account element to the beginning of the list
-          target.insertBefore(el.parentNode, target.firstChild);
-          el.querySelector("img").src = iconurl;
+          target.insertBefore(el.parentNode.parentNode, target.firstChild);
+          const favImg = document.createElement("img");
+          favImg.src = iconurl;
+          const svgElements = el.querySelectorAll("svg");
+          el.querySelectorAll("svg")[1].replaceWith(Object.assign(document.createElement("img"), {
+            src: iconurl,
+            style: 'width: auto; height: auto;'
+          }));
           break;
         }
       }
@@ -109,18 +113,21 @@ function sortFavs(arFavs) {
 
 function saveAccountNames() {
   const accountsSelector = () =>
-    Array.from(document.querySelectorAll("sso-expander .instance-block"));
+      Array.from(document.querySelectorAll('button[data-testid="account-list-cell"]'));
   onElementReady(accountsSelector, function (err, accountElements) {
     if (err) {
       console.error(err);
       return;
     }
     const accountMap = accountElements.reduce((map, el) => {
-      const name = el.querySelector(".name").textContent;
-      const accountId = el
-        .querySelector(".accountId")
-        .textContent.replace("#", "");
-      map[accountId] = name;
+      const name = el.querySelector("strong").textContent;
+      const childDivs = el.querySelectorAll("div");
+      Array.from(childDivs).map(el => {
+        const id = el.textContent.match(/\d{12}/);
+        if (id) {
+          map[id] = name;
+        }
+      })
       return map;
     }, {});
 
