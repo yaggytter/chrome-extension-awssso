@@ -13,13 +13,13 @@ var defaultfavsjson = {
 };
 
 window.addEventListener("load", function () {
-  const {hostname, pathname} = window.location;
+  const { hostname, pathname } = window.location;
   if (hostname.endsWith(".awsapps.com") && pathname.startsWith("/start")) {
     // AWS SSO portal
     saveDataOnSSOAppExpansion();
   } else if (
-      hostname.includes("console.aws.amazon.com") ||
-      hostname.includes("health.aws.amazon.com")
+    hostname.includes("console.aws.amazon.com") ||
+    hostname.includes("health.aws.amazon.com")
   ) {
     // AWS Console (including PHD)
     changeConsoleHeaderAndFooter();
@@ -39,8 +39,8 @@ function onElementReady(selectorFn, fn) {
     const selection = selectorFn();
     const firstEl = Array.isArray(selection) ? selection[0] : selection;
     firstEl
-        ? fn(undefined, selection)
-        : window.requestAnimationFrame(waitForElement);
+      ? fn(undefined, selection)
+      : window.requestAnimationFrame(waitForElement);
   };
   waitForElement();
 }
@@ -130,11 +130,12 @@ function saveAccountNames() {
       })
       return map;
     }, {});
+
     chrome.runtime.sendMessage(
-        {method: "saveSSOData", data: accountMap},
-        function (response) {
-          console.log("Saved SSO data to LocalStorage for Console augmentation.");
-        }
+      { method: "saveSSOData", data: accountMap },
+      function (response) {
+        console.log("Saved SSO data to LocalStorage for Console augmentation.");
+      }
     );
   });
 }
@@ -142,15 +143,15 @@ function saveAccountNames() {
 function changeConsoleHeaderAndFooter() {
   const consoleFederatedLoginPattern = /AWSReservedSSO_(.+)_(.+)/;
   // show AWS SSO data to AWS console header
-  chrome.runtime.sendMessage({method: "getSSOData"}, function (response) {
+  chrome.runtime.sendMessage({ method: "getSSOData" }, function (response) {
     if (!(response && response.data)) {
       return;
     }
     const accountMap = response.data.data;
     const labelSelector = () =>
-        document.querySelector(
-            "span[data-testid='awsc-nav-account-menu-button']"
-        );
+      document.querySelector(
+        "span[data-testid='awsc-nav-account-menu-button']"
+      );
 
     onElementReady(labelSelector, function (err, label) {
       if (err) {
@@ -161,7 +162,7 @@ function changeConsoleHeaderAndFooter() {
       label = label.querySelector("span");
 
       const accountIdDivSelector = () =>
-          document.querySelector("div[data-testid='account-detail-menu']");
+        document.querySelector("div[data-testid='account-detail-menu']");
 
       onElementReady(accountIdDivSelector, function (err, accountIdDiv) {
         if (err) {
@@ -186,8 +187,8 @@ function changeConsoleHeaderAndFooter() {
         var roleName = "";
         for (span of accountIds) {
           const accountDetail = span.innerText
-              .split("/")[0]
-              .match(consoleFederatedLoginPattern);
+            .split("/")[0]
+            .match(consoleFederatedLoginPattern);
           if (accountDetail && accountDetail.length > 1) {
             roleName = accountDetail[1];
             break;
@@ -210,7 +211,7 @@ function changeConsoleHeaderAndFooter() {
             re = new RegExp(regexp);
             if (re.test(accountName)) {
               const headerSelector = () =>
-                  document.querySelector("header").querySelector("nav");
+                document.querySelector("header").querySelector("nav");
               onElementReady(headerSelector, function (err, header) {
                 if (err) {
                   // console.warn(err);
@@ -219,7 +220,7 @@ function changeConsoleHeaderAndFooter() {
                 header.style.backgroundColor = colors[regexp];
               });
               const footerSelector = () =>
-                  document.querySelector("div[id='console-nav-footer-inner']");
+                document.querySelector("div[id='console-nav-footer-inner']");
               onElementReady(footerSelector, function (err, footer) {
                 if (err) {
                   return;
